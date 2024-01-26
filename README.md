@@ -1,4 +1,4 @@
-# Script Name.
+# SpreadSheetSculptor.
 
 ***`Author` Ragdejt***
 
@@ -32,17 +32,29 @@ Which are used throughout the script to provide clear and consistent error messa
 #
 The `menu()` function displays a menu of options to the user and waits for them to enter a valid option. If the user enters an invalid option, the script will display an error message and prompt the user to try again. If the user enters the option to exit the program (0), the script will exit. Otherwise, the script will call the appropriate function based on the user's selection.
 #
+The `menu_spreadsheet()` Displays a menu of options for managing the spreadsheet.
+#
+The `list_spreadsheet()` Lists the spreadsheets in the specified directory.
+#
 The `read_spreadsheet()` function prompts the user to enter the name and file format of the spreadsheet they want to read, then uses pandas to read the contents of the spreadsheet and display it to the user.
 #
-The `input_data()` function prompts the user to enter the name and file format of the spreadsheet they want to modify, then reads the contents of the spreadsheet using pandas. The function then prompts the user to enter the data for a new product, and adds a new row to the spreadsheet with this data. Finally, the function writes the updated spreadsheet back to disk.
+The `insert_data()` function prompts the user to enter the name and file format of the spreadsheet they want to modify, then reads the contents of the spreadsheet using pandas. The function then prompts the user to enter the data for a new product, and adds a new row to the spreadsheet with this data. Finally, the function writes the updated spreadsheet back to disk.
 #
-The `remove_data()` function prompts the user to enter the name and file format of the spreadsheet they want to modify, then reads the contents of the spreadsheet using pandas. The function then prompts the user to enter the line number of the row they want to remove, and removes this row from the spreadsheet. Finally, the function writes the updated spreadsheet back to disk.
+The `delete_data()` function prompts the user to enter the name and file format of the spreadsheet they want to modify, then reads the contents of the spreadsheet using pandas. The function then prompts the user to enter the line number of the row they want to remove, and removes this row from the spreadsheet. Finally, the function writes the updated spreadsheet back to disk.
+#
+The `select_spreadsheet()` Prompts the user to select a spreadsheet.
 #
 The `delete_spreadsheet()` function prompts the user to enter the name and file format of an existing Excel spreadsheet, then deletes this file from disk. It is used to permanently delete a spreadsheet.
 #
 The `create_spreadsheet()` function prompts the user to enter the name and file format of a new Excel spreadsheet, then creates a new, empty spreadsheet with this name and file format using the pandas library. It is used to create a new spreadsheet from scratch.
 #
-The `locate_data()` function prompts the user to enter the name and file format of the spreadsheet they want to search, then reads the contents of the spreadsheet using pandas. The function then displays a menu of columns in the spreadsheet and prompts the user to select one. Depending on the user's selection, the function displays the values in the corresponding column and waits for the user to press enter before continuing.
+The `delete_data()` Prompts the user to enter the name and file format of the spreadsheet they want to modify, then reads the contents of the spreadsheet using pandas. The function then prompts the user to enter the line number of the row they want to remove, and removes this row from the spreadsheet. Finally, the function writes the updated spreadsheet back to disk.
+#
+The `find_data()` function prompts the user to enter the name and file format of the spreadsheet they want to search, then reads the contents of the spreadsheet using pandas. The function then displays a menu of columns in the spreadsheet and prompts the user to select one. Depending on the user's selection, the function displays the values in the corresponding column and waits for the user to press enter before continuing.
+#
+The `add_column()` Prompts the user to enter the name and file format of the spreadsheet they want to modify, then reads the contents of the spreadsheet using pandas. The function then prompts the user to enter the name of the new column, and adds this column to the spreadsheet. Finally, the function writes the updated spreadsheet back to disk.
+#
+The `remove_column()` Prompts the user to enter the name and file format of the spreadsheet they want to modify, then reads the contents of the spreadsheet using pandas. The function then prompts the user to enter the name of the column they want to remove, and removes this column from the spreadsheet. Finally, the function writes the updated spreadsheet back to disk.
 #
 Overall, this script provides a convenient and user-friendly way to manage an Excel spreadsheet for product inventory. The script includes clear and concise error messages and prompts, and uses pandas to read and write Excel files, making it easy to use and modify.
 #
@@ -226,8 +238,6 @@ This script requires Python 3 and the following libraries:
 * pandas
 
 * rich
-
-* openpyxl
 
 # Repository
 

@@ -113,7 +113,7 @@ MENU = """
 
 [Menu]
 
-[0]:[green][Exit][/]
+[0]:[green][Back][/]
 [1]:[green][Insert data][/]
 [2]:[green][Delete data][/]
 [3]:[green][Add column][/]

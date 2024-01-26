@@ -85,27 +85,29 @@ def read_spreadsheet():
 # Menu spreadsheet.
 #--------------------------------------------------------------------------------------------------#
 def menu_spreadsheet():
-    print(MENU_SPREADSHEET)
-    menu_spreadsheet_input = int(input("[Enter one of the valid options]: "))
-    match menu_spreadsheet_input:
-        case 0:
-            exit()
-        case 1:
-            list_spreadsheet()
-            menu_spreadsheet()
-        case 2:
-            select_spreadsheet()
-        case 3:
-            create_spreadsheet()
-            menu_spreadsheet()
+    try:
+        print(MENU_SPREADSHEET)
+        menu_spreadsheet_input = int(input("[Enter one of the valid options]: "))
+        match menu_spreadsheet_input:
+            case 0:
+                exit()
+            case 1:
+                list_spreadsheet()
+                menu_spreadsheet()
+            case 2:
+                select_spreadsheet()
+            case 3:
+                create_spreadsheet()
+                menu_spreadsheet()
 
-        case 4:
-            delete_spreadsheet()
-            menu_spreadsheet()
-        case 5:
-            read_spreadsheet()
-            menu_spreadsheet()
-
+            case 4:
+                delete_spreadsheet()
+                menu_spreadsheet()
+            case 5:
+                read_spreadsheet()
+                menu_spreadsheet()
+    except ValueError:
+        print(VALUE_ERROR)
 #--------------------------------------------------------------------------------------------------#
 # Input data.
 #--------------------------------------------------------------------------------------------------#
@@ -218,7 +220,7 @@ def menu():
         menu_input = int(input("[Enter one of the valid options]: "))
         match menu_input:
             case 0:
-                exit()
+                menu_spreadsheet()
             case 1:
                 insert_data()
                 menu()
