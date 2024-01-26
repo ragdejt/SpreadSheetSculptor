@@ -1,28 +1,71 @@
 #--------------------------------------------------------------------------------------------------#
 # Import necessary libraries.
 #--------------------------------------------------------------------------------------------------#
+import os
 import time
 import pandas
 from rich import print
 from pathlib import Path
-from utils.troubleshooting import *
 from utils.ascii_text import *
+from utils.troubleshooting import *
 #--------------------------------------------------------------------------------------------------#
 # Path's.
 #--------------------------------------------------------------------------------------------------#
 user_path = Path.home()
 script_path = user_path / ("Excel_Spreadsheet")
 #--------------------------------------------------------------------------------------------------#
-# Create directory.                                                                                #
-#--------------------------------------------------------------------------------------------------#
-def create_directory():
-    script_path.mkdir(exist_ok=True)
-#--------------------------------------------------------------------------------------------------#
 # Date / Time.
 #--------------------------------------------------------------------------------------------------#
 def date_time():
     print(time.strftime(DATE_TIME).center(100, "-"))
     input("[Press ENTER to continue]".center(100, "-"))
+    os.system("cls")
+#--------------------------------------------------------------------------------------------------#
+# List spreadsheet.
+#--------------------------------------------------------------------------------------------------#
+def list_spreadsheet():
+    try:
+        print("[Spreadsheet list]".center(100, "-"))
+        for i, dir in enumerate(os.listdir(script_path), start=1):
+            print(f"[{i}]: {dir}")
+        date_time()
+    except FileNotFoundError:
+        print(FILE_NOT_FOUND_ERROR)
+#--------------------------------------------------------------------------------------------------#
+# Select the spreadsheet.
+#--------------------------------------------------------------------------------------------------#
+def select_spreadsheet():
+    print(SELECT_SPREADSHEET)
+    global spreadsheet_name
+    spreadsheet_name = str(input("[Enter the name of the spreadsheet]: "))
+    spreadsheet_ext = str(input("[Enter the spreadsheet file format]: "))
+    global spreadsheet_path
+    spreadsheet_path = script_path / (spreadsheet_name + spreadsheet_ext)
+    date_time()
+    menu()
+#--------------------------------------------------------------------------------------------------#
+# Create spreadsheet.
+#--------------------------------------------------------------------------------------------------#
+def create_spreadsheet():
+        print(CREATE_SPREADSHEET)
+        spreadsheet_name = str(input("[Enter the name of the spreadsheet]: "))
+        spreadsheet_ext = str(input("[Enter the spreadsheet file format]: "))
+        spreadsheet_path = script_path / (spreadsheet_name + spreadsheet_ext)
+        spreadsheet = pandas.DataFrame()
+        spreadsheet.to_excel(spreadsheet_path)
+        print("[Spreadsheet created]".center(100, "-"))
+        date_time()
+#--------------------------------------------------------------------------------------------------#
+# Delete spreadsheet.
+#--------------------------------------------------------------------------------------------------#
+def delete_spreadsheet():
+        print(DELETE_SPREADSHEET)
+        spreadsheet_name = str(input("[Enter the name of the spreadsheet]: "))
+        spreadsheet_ext = str(input("[Enter the spreadsheet file format]: "))
+        spreadsheet_path = script_path / (spreadsheet_name + spreadsheet_ext)
+        spreadsheet_path.unlink()
+        print("[Spreadsheet deleted]".center(100, "-"))
+        date_time()
 #--------------------------------------------------------------------------------------------------#
 # Read spreadsheet.
 #--------------------------------------------------------------------------------------------------#
@@ -35,17 +78,40 @@ def read_spreadsheet():
         spreadsheet = pandas.read_excel(spreadsheet_path)
         print("\n[SPREADSHEET]:\n")
         print(spreadsheet)
+        date_time()
     except FileNotFoundError:
         print(FILE_NOT_FOUND_ERROR)
 #--------------------------------------------------------------------------------------------------#
+# Menu spreadsheet.
+#--------------------------------------------------------------------------------------------------#
+def menu_spreadsheet():
+    print(MENU_SPREADSHEET)
+    menu_spreadsheet_input = int(input("[Enter one of the valid options]: "))
+    match menu_spreadsheet_input:
+        case 0:
+            exit()
+        case 1:
+            list_spreadsheet()
+            menu_spreadsheet()
+        case 2:
+            select_spreadsheet()
+        case 3:
+            create_spreadsheet()
+            menu_spreadsheet()
+
+        case 4:
+            delete_spreadsheet()
+            menu_spreadsheet()
+        case 5:
+            read_spreadsheet()
+            menu_spreadsheet()
+
+#--------------------------------------------------------------------------------------------------#
 # Input data.
 #--------------------------------------------------------------------------------------------------#
-def input_data():
+def insert_data():
     try:
-        print(INPUT_DATA)
-        spreadsheet_name = str(input("[Enter the name of the spreadsheet]: "))
-        spreadsheet_ext = str(input("[Enter the spreadsheet file format]: "))
-        spreadsheet_path = script_path / (spreadsheet_name + spreadsheet_ext)
+        print(INSERT_DATA)
         spreadsheet = pandas.read_excel(spreadsheet_path)
         print(
             "\n[SPREADSHEET]: \n\n",
@@ -80,142 +146,95 @@ def input_data():
         }
         new_row = pandas.DataFrame(new_data)
         spreadsheet = pandas.concat([spreadsheet, new_row], ignore_index=True)
-        print("\n[Data inserted into the spreadsheet]\n".center(100, "-"))
         spreadsheet.to_excel(spreadsheet_path, index=False)
+        print("\n[Data inserted into the spreadsheet]\n".center(100, "-"))
+        date_time()
 #--------------------------------------------------------------------------------------------------#
 # Remove data.
 #--------------------------------------------------------------------------------------------------#
-def remove_data():
-        print(REMOVE_DATA)
-        spreadsheet_name = str(input("[Enter the name of the spreadsheet]: "))
-        spreadsheet_ext = str(input("[Enter the spreadsheet file format]: "))
-        spreadsheet_path = script_path / (spreadsheet_name + spreadsheet_ext)
+def delete_data():
+        print(DELETE_DATA)
         spreadsheet = pandas.read_excel(spreadsheet_path)
         line_choice = int(input("[Enter the line you want to remove]: "))
         spreadsheet = spreadsheet.drop(line_choice)
         spreadsheet.to_excel(spreadsheet_path, index=False)
-        print("[Line removed]".center(100, "-"))
+        print("[Data removed]".center(100, "-"))
+        date_time()
 #--------------------------------------------------------------------------------------------------#
-# Create spreadsheet.
+# Add column
 #--------------------------------------------------------------------------------------------------#
-def create_spreadsheet():
-        print(CREATE_SPREADSHEET)
-        spreadsheet_name = str(input("[Enter the name of the spreadsheet]: "))
-        spreadsheet_ext = str(input("[Enter the spreadsheet file format]: "))
-        spreadsheet_path = script_path / (spreadsheet_name + spreadsheet_ext)
-        spreadsheet = pandas.DataFrame()
-        spreadsheet.to_excel(spreadsheet_path)
+def add_column():
+        try:
+            print("")
+            spreadsheet = pandas.read_excel(spreadsheet_path)
+        except FileNotFoundError:
+            print(FILE_EXISTS_ERROR)
+        else:
+            new_column_name = input("[Enter the column name]")
+            new_column_value = input(f"[Enter value for {new_column_name}]: ")
+            spreadsheet[new_column_name] = [new_column_value]
+            spreadsheet.to_excel(spreadsheet_path, index=False)
+            print("[Added column]".center(100, "-"))    
+            date_time()
 #--------------------------------------------------------------------------------------------------#
-# Delete spreadsheet.
+# Remove column
 #--------------------------------------------------------------------------------------------------#
-def delete_spreadsheet():
-        print(DELETE_SPREADSHEET)
-        spreadsheet_name = str(input("[Enter the name of the spreadsheet]: "))
-        spreadsheet_ext = str(input("[Enter the spreadsheet file format]: "))
-        spreadsheet_path = script_path / (spreadsheet_name + spreadsheet_ext)
-        spreadsheet_path.unlink()
+def remove_column():
+        try:
+            print("")
+            spreadsheet = pandas.read_excel(spreadsheet_path)
+        except FileNotFoundError:
+            print(FILE_NOT_FOUND_ERROR)
+        else:
+            new_column_name = input("[Enter the column name]")
+            spreadsheet = spreadsheet.drop(new_column_name, axis=1)
+            spreadsheet.to_excel(spreadsheet_path, index=False)
+            print("[Column removed]".center(100, "-"))
+            date_time()
 #--------------------------------------------------------------------------------------------------#
 # Locate data.
 #--------------------------------------------------------------------------------------------------#
-def locate_data():
+def find_data():
     try:
-        print(LOCATE_DATA)
-        spreadsheet_name = str(input("[Enter the name of the spreadsheet]: "))
-        spreadsheet_ext = str(input("[Enter the spreadsheet file format]: "))
-        spreadsheet_path = script_path / (spreadsheet_name + spreadsheet_ext)
+        print(FIND_DATA)
         spreadsheet = pandas.read_excel(spreadsheet_path)
         column_spreadsheet = spreadsheet.columns
         print("\n[Spreadsheet columns]:\n")
-        for i, column in enumerate(column_spreadsheet, start=1):
+        for i, column in enumerate(column_spreadsheet):
             print(f"[{i}]: [green]{column}[/]")
+        selected_column_index = int(input("\n[Select column number]: "))
+        selected_column = column_spreadsheet[selected_column_index]
+        print(f"Selected Column: [green]{selected_column}[/]\n")
+        print(spreadsheet[selected_column])
+        date_time()
     except FileNotFoundError:
         print(FILE_EXISTS_ERROR)
-    else:
-        column_option = int(input("\n[Enter one of the valid options]: "))
-        match column_option:
-            case 0:
-                print("\n[Product name]\n")
-                column_value0 = spreadsheet['Product name'].values
-                for i, item in enumerate(column_value0, start=1):
-                    print(f"[{i}]: {item}")
-                date_time()
-            case 1:
-                print("\n[Description]\n")
-                column_value1 = spreadsheet['Description'].values
-                for i, item in enumerate(column_value1, start=1):
-                    print(f"[{i}]: {item}")
-                date_time()
-            case 2:
-                print("\n[Category]\n")
-                column_value2 = spreadsheet['Category'].values
-                for i, item in enumerate(column_value2, start=1):
-                    print(f"[{i}]: {item}")
-                date_time()
-            case 3:
-                print("\n[Product Code]\n")
-                column_value3 = spreadsheet['Product Code'].values
-                for i, item in enumerate(column_value3, start=1):
-                    print(f"[{i}]: {item}")
-                date_time()
-            case 4:
-                print("\n[Weight (kg)]\n")
-                column_value4 = spreadsheet['Weight (kg)'].values
-                for i, item in enumerate(column_value4, start=1):
-                    print(f"[{i}]: {item}")
-                date_time()
-            case 5:
-                print("\n[Dimension (Height)]\n")
-                column_value5 = spreadsheet['Dimension (Height)'].values
-                for i, item in enumerate(column_value5, start=1):
-                    print(f"[{i}]: {item}")
-                date_time()
-            case 6:
-                print("\n[Dimension (Width)]\n")
-                column_value6 = spreadsheet['Dimension (Width)'].values
-                for i, item in enumerate(column_value6, start=1):
-                    print(f"[{i}]: {item}")
-                date_time()
-            case 7:
-                print("\n[Dimension (Lenght)]\n")
-                column_value7 = spreadsheet['Dimension (Lenght)'].values
-                for i, item in enumerate(column_value7, start=1):
-                    print(f"[{i}]: {item}")
-            case 8:
-                print("\n[Price]\n")
-                column_value8 = spreadsheet['Price'].values
-                for i, item in enumerate(column_value8, start=1):
-                    print(f"[{i}]: {item}")
-                date_time()
-            case 9:
-                print("\n[Quantity in stock]\n")
-                column_value9 = spreadsheet['Quantity in stock'].values
-                for i, item in enumerate(column_value9, start=1):
-                    print(f"[{i}]: {item}")
-                date_time()
 #--------------------------------------------------------------------------------------------------#
-# Menu.
+# Main Menu.
 #--------------------------------------------------------------------------------------------------#
 def menu():
-    while True:
-        try:
-            print(MENU)
-            menu_input = int(input("[Enter one of the valid options]: "))
-            match menu_input:
-                case 0:
-                    exit()
-                case 1:
-                    input_data()
-                case 2:
-                    remove_data()
-                case 3:
-                    create_spreadsheet()
-                case 4:
-                    delete_spreadsheet()
-                case 5:
-                    read_spreadsheet()
-                case 6:
-                    locate_data()
-                case _:
-                    print(VALUE_ERROR)
-        except ValueError:
-            print(VALUE_ERROR)
+    try:
+        print(MENU)
+        menu_input = int(input("[Enter one of the valid options]: "))
+        match menu_input:
+            case 0:
+                exit()
+            case 1:
+                insert_data()
+                menu()
+            case 2:
+                delete_data()
+                menu()
+            case 3:
+                add_column()
+                menu()
+            case 4:
+                remove_column()
+                menu()
+            case 5:
+                find_data()
+                menu()
+            case _:
+                print(VALUE_ERROR)
+    except ValueError:
+        print(VALUE_ERROR)
